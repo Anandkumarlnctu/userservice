@@ -17,13 +17,12 @@ public class UserRequestDTO {
     @Email
     private String email;
 
-    @NotBlank
-    private String mobileNumber;
+    @NotNull(message = "Mobile number is required")
+    private Long mobileNumber;
 
     @NotBlank
     private String password;
 
-    @NotEmpty
-    private List<AddressRequestDTO> addresses;
+    
 }
 

@@ -1,5 +1,6 @@
 package com.example.onlineshopping.controller;
 
+import com.example.onlineshopping.dto.request.EmailVerifDTO;
 import com.example.onlineshopping.dto.request.UserRequestDTO;
 import com.example.onlineshopping.dto.response.UserResponseDTO;
 import com.example.onlineshopping.service.UserService;
@@ -17,14 +18,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(
+    public ResponseEntity<String> register(
             @Valid @RequestBody UserRequestDTO dto) {
 
-        return ResponseEntity.ok(userService.register(dto));
+    	userService.register(dto);
+        return ResponseEntity.ok("OTP sent on email ");
+    }
+    @PostMapping("/verify-otp")
+    public ResponseEntity<String> verifyOtp(@RequestBody EmailVerifDTO edto) {
+        userService.verifyOtp(edto);
+        return ResponseEntity.ok("Registration successful");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUser(id));
-    }
+
+   
 }

@@ -1,16 +1,15 @@
 server:
-  port: 4444
+  port: 8080
 
 spring:
   application:
     name: user-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/online_shopping
-    username: root
-    password: Root123$
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    url: jdbc:postgresql://dpg-d55smdn5r7bs73f8chqg-a.singapore-postgres.render.com/users
+    username: userservicedb_mtzo_user
+    password: OuIjuS7DT2zCHLMxnniKPTRcqVo9qSbS
+    
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,7 +17,19 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: adisingh234560@gmail.com
+    password: mwvb iecu vrea rpis
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 eureka:
   client:

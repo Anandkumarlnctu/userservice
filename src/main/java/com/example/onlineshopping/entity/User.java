@@ -24,27 +24,16 @@ public class User {
     private String email;
 
     @Column(unique = true)
-    private String mobileNumber;
+    private Long mobileNumber;
 
     private String password;
-
-    private Boolean isActive = true;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
+    private boolean emailVerified;
+    private String otp;
+    
+   
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id") // unidirectional
     private List<Address> addresses;
 
-    @PrePersist
-    void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    
 }

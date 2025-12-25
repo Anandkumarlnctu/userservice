@@ -15,8 +15,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<String> handleDuplicate(DuplicateResourceException ex) {
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<String> handleDuplicate(UserAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

@@ -8,6 +8,7 @@ import com.example.onlineshopping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,63 +16,63 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired EmailService emailService;
 
-    public UserResponseDTO register(UserRequestDTO dto) {
+    public void register(UserRequestDTO dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new DuplicateResourceException("Email already exists");
+            throw new UserAlreadyExistsException("Email already exists");
         }
+        
+        if(userRepository.existsByMobileNumber(dto.getMobileNumber()))
+        {
+        	throw new UserAlreadyExistsException("Mobile number already exists");
+        }
+
+        String otp = generateOtp();
 
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setMobileNumber(dto.getMobileNumber());
-        user.setPassword(dto.getPassword()); // encrypt later
-        user.setIsActive(true);
+        user.setPassword(dto.getPassword());
 
-        user.setAddresses(
-                dto.getAddresses().stream()
-                        .map(a -> new Address(
-                                null,
-                                a.getAddressLine(),
-                                a.getCity(),
-                                a.getState(),
-                                a.getCountry(),
-                                a.getPincode()
-                        ))
-                        .collect(Collectors.toList())
-        );
+         user.setOtp(otp);
+        
+        user.setEmailVerified(false);
 
-        return mapToResponse(userRepository.save(user));
+        userRepository.save(user);
+
+        emailService.sendOtp(dto.getEmail(), otp);
+        
+          
+    }
+    private String generateOtp() {
+        return String.valueOf(new Random().nextInt(900000) + 100000); // 6 digit
+    }
+    public void verifyOtp(EmailVerifDTO edto) {
+
+        User user = userRepository.findByEmail(edto.getEmail());
+                
+
+        System.out.println(user.getOtp());
+        System.out.println(edto.getOtp());
+        
+        
+
+        if (!user.getOtp().equals(edto.getOtp())) {
+            throw new IllegalArgumentException("Invalid OTP");
+        }
+
+       
+       user.setOtp(null);
+        user.setEmailVerified(true);
+        
+        userRepository.save(user);
     }
 
-    public UserResponseDTO getUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found: " + id));
 
-        return mapToResponse(user);
-    }
+   
 
-    private UserResponseDTO mapToResponse(User user) {
-
-        return new UserResponseDTO(
-                user.getUserId(),
-                user.getName(),
-                user.getEmail(),
-                user.getMobileNumber(),
-                user.getIsActive(),
-                user.getCreatedAt(),
-                user.getAddresses().stream()
-                        .map(a -> new AddressResponseDTO(
-                                a.getAddressId(),
-                                a.getAddressLine(),
-                                a.getCity(),
-                                a.getState(),
-                                a.getCountry(),
-                                a.getPincode()
-                        ))
-                        .collect(Collectors.toList())
-        );
-    }
+   
 }
