@@ -29,11 +29,11 @@ public class User {
     private String password;
     private boolean emailVerified;
     private String otp;
-    
-   
+
+    private LocalDateTime otpExpiry;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id") // unidirectional
     private List<Address> addresses;
 
-    
 }
