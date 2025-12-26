@@ -1,3 +1,4 @@
+
 server:
   port: 8080
 
@@ -9,7 +10,7 @@ spring:
     url: jdbc:postgresql://dpg-d55smdn5r7bs73f8chqg-a.singapore-postgres.render.com/users
     username: userservicedb_mtzo_user
     password: OuIjuS7DT2zCHLMxnniKPTRcqVo9qSbS
-    
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,16 +21,23 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   mail:
-    host: smtp.gmail.com
-    port: 465
-    username: adisingh234560@gmail.com
-    password: mwvb iecu vrea rpis
+    host: smtp-relay.brevo.com
+    port: 587
+    username: 9ecadf001@smtp-brevo.com      # from Brevo SMTP settings
+    password: bskRJRGUs9lVJWJ   # from Brevo SMTP settings
     properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+# Uncomment below if you want Gmail SMTP instead of Brevo
+# mail:
+#   host: smtp.gmail.com
+#   port: 465
+#   username: adisingh234560@gmail.com
+#   password: mwvb iecu vrea rpis
+#   properties:
+#     mail.smtp.auth: true
+#     mail.smtp.starttls.enable: true
 
 eureka:
   client:
