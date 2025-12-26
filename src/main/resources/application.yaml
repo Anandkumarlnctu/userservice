@@ -21,7 +21,7 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: adisingh234560@gmail.com
     password: mwvb iecu vrea rpis
     properties:
