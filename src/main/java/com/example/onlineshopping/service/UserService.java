@@ -111,6 +111,34 @@ public class UserService {
         userRepository.save(user);
         emailService.sendOtp(email, otp);
     }
+	public UserResponseDTO getUserFromToken(String token) {
+		try {
+			String email = JwtUtil.extractEmail(token);
+			User user = userRepository.findByEmail(email);
+			if (user == null) {
+				throw new ResourceNotFoundException("User not found with email: " + email);
+			}
+			UserResponseDTO userResponseDTO = new UserResponseDTO();
+			userResponseDTO.setName(user.getName());
+			userResponseDTO.setEmail(user.getEmail());
+			userResponseDTO.setMobileNumber(user.getMobileNumber());
+			userResponseDTO.setAddresses(
+					user.getAddresses().stream().map(address -> {
+						AddressResponseDTO addressDTO = new AddressResponseDTO();
+						addressDTO.setAddressLine(address.getAddressLine());
+						addressDTO.setCity(address.getCity());
+						addressDTO.setState(address.getState());
+						addressDTO.setPincode(address.getPincode());
+						addressDTO.setCountry(address.getCountry());
+						return addressDTO;
+					}).collect(Collectors.toList())
+			);
+			return userResponseDTO;
+		} catch (Exception e) {
+			throw new InvalidCredentialsException("Invalid JWT token");
+		}
+		
+	}
 
    
 }

@@ -5,6 +5,9 @@ import com.example.onlineshopping.dto.request.LoginRequestDTO;
 import com.example.onlineshopping.dto.request.UserRequestDTO;
 import com.example.onlineshopping.dto.response.UserResponseDTO;
 import com.example.onlineshopping.service.UserService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponseDTO>getprofile(HttpServletRequest request){
+		String token = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("jwt")) {
+					token = cookie.getValue();
+				}
+			}
+		}
+		UserResponseDTO userResponseDTO = userService.getUserFromToken(token);
+		return ResponseEntity.ok(userResponseDTO);
+	}
     @PostMapping("/register")
     public ResponseEntity<String> register(
             @Valid @RequestBody UserRequestDTO dto) {

@@ -11,11 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 public class UserResponseDTO {
 
-    private Long userId;
+   
     private String name;
     private String email;
-    private String mobileNumber;
-    private Boolean isActive;
-    private LocalDateTime createdAt;
+    private Long mobileNumber;
+   
     private List<AddressResponseDTO> addresses;
 }
